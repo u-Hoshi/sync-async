@@ -15,6 +15,7 @@ btn1.addEventListener("click", function () {
   setTimeout(() => console.log(2), 1000);
   setTimeout(() => console.log(1), 1000);
 });
+// これだと３つとも同じバックグラウンドに送られるため、３カウントともに１秒後に出力される
 
 btn2.addEventListener("click", function () {
   setTimeout(() => {
@@ -26,4 +27,29 @@ btn2.addEventListener("click", function () {
       }, 1000);
     }, 1000);
   }, 1000);
+});
+// 俗に言うJSのコールバック地獄
+btn3.addEventListener("click", () => {
+  new Promise((resolve) => {
+    setTimeout(() => {
+      console.log(3);
+      resolve();
+    }, 1000);
+  })
+    .then(() => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          console.log(2);
+          resolve();
+        }, 1000);
+      });
+    })
+    .then(() => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          console.log(1);
+          resolve();
+        }, 1000);
+      });
+    });
 });
